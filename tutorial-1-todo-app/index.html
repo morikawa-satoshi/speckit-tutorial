@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ToDoアプリ</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <main class="app">
+    <header class="app__header">
+      <h1>ToDoリスト</h1>
+      <p class="app__subtitle">シンプルで直感的なタスク管理</p>
+    </header>
+
+    <section class="card">
+      <form id="todo-form" class="form" autocomplete="off">
+        <label class="sr-only" for="task-input">タスクを入力</label>
+        <input id="task-input" name="task" type="text" maxlength="200" placeholder="タスクを入力して Enter または追加" required />
+
+        <label class="sr-only" for="priority-select">優先度</label>
+        <select id="priority-select" name="priority" aria-label="優先度">
+          <option value="high">高</option>
+          <option value="medium" selected>中</option>
+          <option value="low">低</option>
+        </select>
+
+        <button type="submit" class="btn btn-primary">追加</button>
+      </form>
+      <div id="error" class="alert" role="status" aria-live="polite"></div>
+    </section>
+
+    <section class="card controls">
+      <div class="control-group" aria-label="ステータスフィルタ">
+        <button class="chip" data-filter="all" aria-pressed="true">すべて</button>
+        <button class="chip" data-filter="active">未完了</button>
+        <button class="chip" data-filter="completed">完了済み</button>
+      </div>
+
+      <div class="control-group" aria-label="優先度フィルタ">
+        <button class="chip" data-priority-filter="all" aria-pressed="true">優先度:すべて</button>
+        <button class="chip" data-priority-filter="high">高</button>
+        <button class="chip" data-priority-filter="medium">中</button>
+        <button class="chip" data-priority-filter="low">低</button>
+      </div>
+
+      <div class="control-group" aria-label="並び替え">
+        <button class="chip" data-sort="createdAt" aria-pressed="true">並び:作成日時</button>
+        <button class="chip" data-sort="priority">並び:優先度</button>
+      </div>
+    </section>
+
+    <section class="card">
+      <ul id="task-list" class="task-list" aria-label="タスクリスト"></ul>
+    </section>
+
+    <footer class="app__footer">
+      <span id="count" aria-live="polite">未完了: 0 件</span>
+    </footer>
+  </main>
+
+  <script src="app.js"></script>
+</body>
+</html>

@@ -1,0 +1,252 @@
+* {
+  box-sizing: border-box;
+}
+
+:root {
+  --bg: #0f172a;
+  --card: #111827;
+  --text: #e5e7eb;
+  --muted: #9ca3af;
+  --primary: #3b82f6;
+  --primary-strong: #2563eb;
+  --danger: #ef4444;
+  --border: #1f2937;
+  --success: #22c55e;
+  --warning: #f59e0b;
+  --radius: 10px;
+  --shadow: 0 12px 30px rgba(0, 0, 0, 0.25);
+  font-family: "Inter", system-ui, -apple-system, "Segoe UI", sans-serif;
+  color: var(--text);
+  background: radial-gradient(circle at 20% 20%, rgba(59, 130, 246, 0.12), transparent 25%),
+    radial-gradient(circle at 80% 0%, rgba(236, 72, 153, 0.12), transparent 30%),
+    var(--bg);
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  padding: 32px 16px 48px;
+}
+
+.app {
+  width: min(960px, 100%);
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.app__header h1 {
+  margin: 0;
+  font-size: clamp(28px, 4vw, 36px);
+}
+
+.app__subtitle {
+  margin: 4px 0 0;
+  color: var(--muted);
+}
+
+.card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 16px;
+  box-shadow: var(--shadow);
+}
+
+.form {
+  display: grid;
+  grid-template-columns: 1fr 140px 110px;
+  gap: 12px;
+  align-items: center;
+}
+
+.form input,
+.form select,
+.btn,
+.chip {
+  font: inherit;
+}
+
+.form input,
+.form select {
+  width: 100%;
+  padding: 10px 12px;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  background: #0b1220;
+  color: var(--text);
+}
+
+.form input:focus,
+.form select:focus,
+.chip:focus-visible,
+.btn:focus-visible {
+  outline: 2px solid var(--primary);
+  outline-offset: 2px;
+}
+
+.btn {
+  padding: 11px 14px;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  transition: transform 120ms ease, box-shadow 120ms ease;
+}
+
+.btn-primary {
+  background: linear-gradient(135deg, var(--primary), var(--primary-strong));
+  color: #fff;
+  box-shadow: 0 10px 24px rgba(59, 130, 246, 0.35);
+}
+
+.btn:hover,
+.chip:hover {
+  transform: translateY(-1px);
+}
+
+.controls {
+  display: grid;
+  gap: 12px;
+}
+
+.control-group {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.chip {
+  padding: 8px 12px;
+  border-radius: 999px;
+  border: 1px solid var(--border);
+  background: #0b1220;
+  color: var(--text);
+  cursor: pointer;
+}
+
+.chip[aria-pressed="true"] {
+  background: rgba(59, 130, 246, 0.16);
+  border-color: var(--primary);
+  color: #e8f0ff;
+}
+
+.task-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.task-item {
+  display: grid;
+  grid-template-columns: auto 1fr auto auto;
+  gap: 10px;
+  align-items: center;
+  padding: 12px;
+  border-radius: 10px;
+  border: 1px solid var(--border);
+  background: #0b1220;
+}
+
+.task-item.completed .task-text {
+  text-decoration: line-through;
+  color: var(--muted);
+}
+
+.task-text {
+  margin: 0;
+  word-break: break-word;
+}
+
+.priority {
+  padding: 4px 8px;
+  border-radius: 999px;
+  font-size: 12px;
+  border: 1px solid transparent;
+}
+
+.priority.high {
+  background: rgba(239, 68, 68, 0.18);
+  color: #fecdd3;
+  border-color: rgba(239, 68, 68, 0.4);
+}
+
+.priority.medium {
+  background: rgba(59, 130, 246, 0.15);
+  color: #dbeafe;
+  border-color: rgba(59, 130, 246, 0.4);
+}
+
+.priority.low {
+  background: rgba(34, 197, 94, 0.15);
+  color: #dcfce7;
+  border-color: rgba(34, 197, 94, 0.4);
+}
+
+.delete-btn {
+  background: transparent;
+  border: none;
+  color: var(--muted);
+  cursor: pointer;
+  font-size: 16px;
+}
+
+.delete-btn:hover {
+  color: var(--danger);
+}
+
+.alert {
+  min-height: 20px;
+  margin-top: 8px;
+  color: var(--danger);
+  font-size: 14px;
+}
+
+.app__footer {
+  color: var(--muted);
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  border: 0;
+}
+
+@media (max-width: 720px) {
+  .form {
+    grid-template-columns: 1fr;
+  }
+
+  .btn {
+    width: 100%;
+  }
+
+  .task-item {
+    grid-template-columns: auto 1fr auto;
+    grid-template-areas:
+      "check text delete"
+      "priority priority priority";
+  }
+
+  .task-text {
+    grid-area: text;
+  }
+
+  .priority {
+    grid-area: priority;
+    justify-self: start;
+  }
+
+  .delete-btn {
+    grid-area: delete;
+  }
+}
