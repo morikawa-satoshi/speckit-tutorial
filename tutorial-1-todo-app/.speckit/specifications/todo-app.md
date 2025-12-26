@@ -1,180 +1,89 @@
-# ToDo App - Functional Specification
+# ToDoアプリ 機能仕様 (Specification)
 
-## Overview
-A simple, browser-based ToDo list application that allows users to manage their daily tasks with local data persistence.
+## 概要
+ブラウザのみで動作するシンプルなToDoリストアプリ。データはローカルストレージに保存し、追加・完了/未完了切替・削除・表示・フィルタを提供する。
 
-## User Stories
+## ユーザーストーリー
 
-### US-1: Add New Task
-**As a** user
-**I want to** add a new task to my todo list
-**So that** I can keep track of things I need to do
+### US-1: ToDoアイテムを追加する
+**として** ユーザー
+**私は** 新しいタスクを追加したい
+**なぜなら** やるべきことを記録したいから
 
-**Acceptance Criteria:**
-- User can enter task text in an input field
-- User can submit the task by pressing Enter or clicking an Add button
-- Task appears immediately in the todo list
-- Input field clears after task is added
-- Empty tasks cannot be added
-- Tasks are saved to LocalStorage
+**受け入れ基準**
+- 入力欄にテキストを入力し、Enterまたは「追加」ボタンで登録できる
+- 空・空白のみの入力は拒否する
+- 追加後、リストに即時反映され、入力欄はクリアされる
+- データは `localStorage` に保存される
 
-### US-2: Mark Task as Complete
-**As a** user
-**I want to** mark tasks as complete
-**So that** I can track my progress
+### US-2: 完了/未完了を切り替える
+**として** ユーザー
+**私は** タスクを完了済みにマーク/解除したい
+**なぜなら** 進捗を把握したいから
 
-**Acceptance Criteria:**
-- User can click on a task to toggle completion status
-- Completed tasks have visual indication (strikethrough, different color)
-- Completion state persists across browser sessions
-- User can toggle back to incomplete if needed
+**受け入れ基準**
+- チェックボックスまたは行クリックで完了/未完了をトグルできる
+- 完了タスクは視覚的に区別（取り消し線や色）される
+- 状態はリロード後も保持される
 
-### US-3: Delete Task
-**As a** user
-**I want to** delete tasks I no longer need
-**So that** my list stays clean and relevant
+### US-3: タスクを削除する
+**として** ユーザー
+**私は** 不要なタスクを削除したい
+**なぜなら** リストを整理したいから
 
-**Acceptance Criteria:**
-- Each task has a delete button (X icon)
-- Clicking delete removes the task immediately
-- Deletion is permanent (no undo)
-- Confirmation not required (keep it simple)
-- Deletion updates LocalStorage
+**受け入れ基準**
+- 各タスクに削除ボタン（Xなど）がある
+- クリックで即時削除され、`localStorage` も更新される
+- 確認ダイアログは不要（シンプルさ優先）
 
-### US-4: View All Tasks
-**As a** user
-**I want to** see all my tasks in a list
-**So that** I can review what needs to be done
+### US-4: タスクを表示・フィルタする
+**として** ユーザー
+**私は** すべて/未完了/完了済みのタスクを見たい
+**なぜなら** 状態に応じて集中したいから
 
-**Acceptance Criteria:**
-- Tasks displayed in chronological order (newest first)
-- Each task shows its text and completion status
-- List updates immediately when tasks change
-- Empty state message when no tasks exist
+**受け入れ基準**
+- 初期表示は「すべて」
+- フィルタは「すべて / 未完了 / 完了済み」を切替でき、選択中が分かる
+- フィルタ変更は即時反映される
+- （任意）フィルタ状態は永続化しなくてよい
 
-### US-5: Filter Tasks
-**As a** user
-**I want to** filter tasks by status
-**So that** I can focus on specific tasks
+## 機能要件
 
-**Acceptance Criteria:**
-- Three filter options: All, Active, Completed
-- "All" shows all tasks (default)
-- "Active" shows only incomplete tasks
-- "Completed" shows only completed tasks
-- Filter selection is visually indicated
-- Filter state does not need to persist
+### モデル
+- `id`: 一意ID（タイムスタンプなど）
+- `text`: タスク本文（最大200文字、トリム必須）
+- `completed`: 真偽値
+- `createdAt`: 作成日時
 
-## Functional Requirements
+### データ永続化
+- 保存先: `localStorage`（キー: `todo-app-tasks`）
+- 追加/更新/削除のたびに即時保存
+- ページロード時に読み込み、パース失敗時は空配列に初期化
 
-### FR-1: Task Model
-Each task must have:
-- `id`: Unique identifier (timestamp)
-- `text`: Task description (string, max 200 characters)
-- `completed`: Boolean completion status
-- `createdAt`: Timestamp of creation
+### UI要素
+- 入力欄 + 追加ボタン（Enterでも追加）
+- タスクリスト（スクロール可）
+  - 完了トグル操作部位
+  - タスク本文
+  - 削除ボタン
+- フィルタバー（すべて/未完了/完了済み）
+- 未完了タスク数の表示
 
-### FR-2: Data Persistence
-- Tasks saved to LocalStorage as JSON
-- Data loaded on page load
-- Updates saved immediately on any change
-- Storage key: `todo-app-tasks`
+### バリデーション / フィードバック
+- 空/空白のみは追加不可、200文字を超える入力は拒否
+- エラー時は簡潔なメッセージ表示（短時間で消えるなど）
 
-### FR-3: User Interface Elements
+## 非機能要件
+- パフォーマンス: 100件程度でストレスなく操作、操作は体感即時
+- アクセシビリティ: キーボード操作対応、適切なラベル/コントラスト
+- レスポンシブ: スマホ〜デスクトップでレイアウトが崩れない
 
-#### Input Section
-- Text input field (placeholder: "What needs to be done?")
-- Add button or Enter key to submit
-- Auto-focus on input field
+## エッジケース
+- LocalStorageが使えない場合: 警告表示し、非永続モードで動作
+- 破損データ: パースエラー時は空配列で再初期化
+- 長文入力: 200文字上限で制御、表示は折返しまたは省略
 
-#### Task List
-- Scrollable list of tasks
-- Each task item contains:
-  - Checkbox or click area for completion toggle
-  - Task text
-  - Delete button (X icon)
-
-#### Filter Bar
-- Three filter buttons: All, Active, Completed
-- Active filter is highlighted
-- Shows count of active tasks
-
-### FR-4: Input Validation
-- Trim whitespace from task text
-- Reject empty or whitespace-only tasks
-- Limit task text to 200 characters
-- Show brief error feedback for invalid input
-
-## Non-Functional Requirements
-
-### NFR-1: Performance
-- Instant response to user interactions
-- Support up to 1000 tasks without performance degradation
-- Minimal DOM manipulation
-
-### NFR-2: Usability
-- Works without JavaScript enabled: graceful degradation message
-- Clear visual feedback for all actions
-- Hover states for interactive elements
-- Focus states for keyboard navigation
-
-### NFR-3: Accessibility
-- Semantic HTML (ul/li for lists, button elements)
-- ARIA labels for icon-only buttons
-- Keyboard navigation support:
-  - Tab through interactive elements
-  - Enter to add task
-  - Space to toggle completion
-- Screen reader friendly
-
-### NFR-4: Browser Compatibility
-- Chrome 90+
-- Firefox 88+
-- Safari 14+
-- Edge 90+
-
-## Edge Cases
-
-### EC-1: LocalStorage Unavailable
-- Detect if LocalStorage is available
-- Show warning message if not available
-- App still functions but data won't persist
-
-### EC-2: Corrupted Data
-- Validate JSON data on load
-- Reset to empty array if data is corrupted
-- Log error to console
-
-### EC-3: Storage Quota Exceeded
-- Handle QuotaExceededError gracefully
-- Show user-friendly error message
-- Prevent app crash
-
-### EC-4: Long Task Text
-- Enforce 200 character limit
-- Show character count as user types
-- Truncate with ellipsis if needed for display
-
-## UI Mockup Description
-
-```
-┌─────────────────────────────────────────┐
-│          My ToDo List                    │
-├─────────────────────────────────────────┤
-│ [What needs to be done?    ] [Add]      │
-├─────────────────────────────────────────┤
-│ Filters: [All] [Active] [Completed]     │
-├─────────────────────────────────────────┤
-│ ☐ Buy groceries                    [X]  │
-│ ☑ Finish report                    [X]  │
-│ ☐ Call dentist                     [X]  │
-├─────────────────────────────────────────┤
-│ 2 items left                             │
-└─────────────────────────────────────────┘
-```
-
-## Success Metrics
-- User can add a task in under 5 seconds
-- All interactions respond within 100ms
-- Zero data loss on page refresh
-- 100% keyboard accessible
+## 成功基準
+- 追加/完了トグル/削除/フィルタが仕様通り動作
+- リロード後もデータが保持される
+- キーボードだけで主要操作が可能
