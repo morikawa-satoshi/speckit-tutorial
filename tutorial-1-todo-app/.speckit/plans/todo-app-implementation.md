@@ -18,15 +18,17 @@ localStorage ── 永続化（ブラウザのみ）
 ```
 
 ## データモデル / 状態
-- Task: `{ id, text, completed, createdAt }`
-- State: `{ tasks: Task[], filter: 'all' | 'active' | 'completed' }`
+- Task: `{ id, text, completed, createdAt, priority }` （priority: `high` | `medium` | `low`、既定 `medium`）
+- State: `{ tasks: Task[], filter: 'all' | 'active' | 'completed', priorityFilter: 'all' | 'high' | 'medium' | 'low', sort: 'createdAt' | 'priority' }`
 - Storage Key: `todo-app-tasks`
 
 ## HTML設計 (index.html)
 - ヘッダ: タイトル
-- 入力フォーム: テキスト入力 + 追加ボタン（Enter対応）
+- 入力フォーム: テキスト入力 + 追加ボタン（Enter対応） + 優先度セレクト（高/中/低, `data-priority`）
 - フィルタバー: すべて / 未完了 / 完了済み（`data-filter`）
-- タスクリスト: `<ul>` に `<li>` を動的挿入（チェック/テキスト/削除ボタン）
+- 優先度フィルタ: すべて / 高 / 中 / 低（`data-priority-filter`）
+- 並び替えトグル: 作成日時降順 / 優先度降順（`data-sort`）
+- タスクリスト: `<ul>` に `<li>` を動的挿入（チェック/テキスト/優先度表示/削除ボタン）
 - フッタ: 未完了件数表示
 - `meta viewport` でレスポンシブ
 
@@ -45,13 +47,16 @@ localStorage ── 永続化（ブラウザのみ）
 
 ### 関数群
 - 永続化: `load()` / `save()` / `generateId()`
-- タスク操作: `addTask(text)` / `toggleTask(id)` / `deleteTask(id)` / `getFilteredTasks(filter)`
-- UI: `renderTasks()` / `renderCount()` / `setActiveFilter(filter)` / `clearInput()` / `showError(msg)`
+- タスク操作: `addTask(text, priority)` / `toggleTask(id)` / `deleteTask(id)` / `getFilteredTasks(filter, priorityFilter)`
+- 並び替え: `sortTasks(mode)` （`createdAt` or `priority` で降順）
+- UI: `renderTasks()` / `renderCount()` / `setActiveFilter(filter)` / `setPriorityFilter(filter)` / `setSort(mode)` / `clearInput()` / `showError(msg)`
 
 ### イベントハンドリング
-- 追加: フォーム submit / Enter キーで `addTask`
+- 追加: フォーム submit / Enter キーで `addTask`（優先度セレクト値を取得、無効値は `medium` にフォールバック）
 - トグル・削除: リストにイベント委譲（`data-id` で識別）
-- フィルタ切替: `data-filter` ボタンで状態更新
+- ステータスフィルタ: `data-filter` ボタンで状態更新
+- 優先度フィルタ: `data-priority-filter` ボタンで状態更新
+- 並び替え: `data-sort` トグルで `createdAt` / `priority` を切替
 - バリデーション: trim必須、空/200文字超は拒否し短いエラー表示
 
 ### レンダリング戦略
@@ -64,19 +69,20 @@ localStorage ── 永続化（ブラウザのみ）
 - 利用不可時は警告表示し非永続モードで継続
 
 ## 実装ステップ
-1) HTML骨組み: 入力・フィルタ・リスト・件数表示、viewport設定
-2) CSS: リセット → レイアウト → コンポーネント → 状態/フォーカス → レスポンシブ
-3) JS初期化: state定義、DOM参照取得、`load()`、イベント登録、初回 `render()`
-4) 機能: 追加/トグル/削除/フィルタ、件数表示、バリデーション
-5) 永続化とエラー処理: save/load 例外、壊れたデータは空配列に再初期化
+1) HTML骨組み: 入力・優先度セレクト・ステータス/優先度フィルタ・並び替えトグル・リスト・件数表示、viewport設定
+2) CSS: リセット → レイアウト → コンポーネント（入力/ボタン/フィルタ/優先度表示/削除）→ 状態/フォーカス → レスポンシブ
+3) JS初期化: state定義、DOM参照取得、`load()`、イベント登録（優先度/並び替え含む）、初回 `render()`
+4) 機能: 追加/トグル/削除/ステータスフィルタ/優先度フィルタ/並び替え、件数表示、バリデーション
+5) 永続化とエラー処理: save/load 例外、壊れたデータは空配列に再初期化、無効優先度は `medium` にフォールバック
 6) アクセシビリティ: フォーカスリング、ARIAラベル（削除ボタン等）、キーボード操作確認
-7) テスト: 追加/削除/トグル/フィルタ/リロード保持、100件程度で性能確認
+7) テスト: 追加/削除/トグル/フィルタ（ステータス・優先度）/並び替え/リロード保持、100件程度で性能確認
 
 ## エッジケースと対策
 - LocalStorage未対応/拒否: バナーやメッセージで通知し非永続で動作
 - データ破損: パース失敗時に空配列で再初期化
 - 文字数超過・空入力: 追加を拒否し簡潔なエラー表示
 - ストレージ容量超過: 例外捕捉しユーザーに通知、操作は継続
+- 優先度の無効値: 受け付けず `medium` にフォールバック
 
 ## パフォーマンス
 - DOM参照をキャッシュし、イベント委譲でリスナ数を削減
@@ -97,7 +103,7 @@ localStorage ── 永続化（ブラウザのみ）
 - ビルド不要の静的ファイル。任意の静的ホスティング（GitHub Pages等）で配信可能
 
 ## 成功基準
-- 追加/完了トグル/削除/フィルタが仕様どおり動作
+- 追加/完了トグル/削除/ステータスフィルタ/優先度フィルタ/並び替えが仕様どおり動作
 - リロード後もデータが保持（LocalStorage有効時）
 - キーボード操作とフォーカスリングが機能
 - スマホ幅でもUIが崩れない
