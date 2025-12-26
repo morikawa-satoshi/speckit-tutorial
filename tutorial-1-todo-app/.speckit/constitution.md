@@ -1,87 +1,50 @@
-# ToDo App - Project Constitution
+# ToDoアプリ 憲法 (Constitution)
 
-## Project Vision
-Create a simple, intuitive, and accessible ToDo list application that helps users manage their daily tasks efficiently.
+## ビジョン
+- シンプルで直感的なToDo管理をブラウザだけで完結させる
+- 学習用サンプルとして、仕様駆動の流れを最小構成で示す
 
-## Core Principles
+## プロダクト原則
+- シンプルで直感的なUI
+- データはローカルストレージに保存
+- バニラJavaScript (フレームワーク不使用)
+- レスポンシブデザインでスマホ/タブレット/PCに対応
+- アクセシビリティを考慮（キーボード操作・コントラスト・ラベル）
 
-### 1. Simplicity First
-- Keep the user interface clean and minimal
-- Focus on core functionality without unnecessary features
-- Avoid complexity in both code and user experience
+## 技術スタックと制約
+- 言語: Vanilla JavaScript
+- マークアップ/スタイル: HTML5 + CSS3
+- データ永続化: `localStorage` のみ
+- ビルド不要（純粋な静的ファイル）
+- 依存ライブラリゼロを目標（必要時も最小限）
 
-### 2. User Experience
-- Intuitive interactions that require no learning curve
-- Responsive design that works on all device sizes
-- Fast and immediate feedback for all user actions
-- Accessible to users with disabilities (WCAG 2.1 AA compliance)
+## 非機能要件
+- 初回ロードが高速（軽量アセット）
+- オフラインでも前回のデータが保持される（localStorage）
+- アクセシビリティ: キーボード操作で全機能利用可能、十分なコントラスト
+- パフォーマンス: DOM操作はシンプルに保ち、リスト数が増えても快適
 
-### 3. Data Privacy
-- All data stored locally in the user's browser
-- No external servers or data transmission
-- User maintains full control of their data
+## UXガイドライン
+- 主要操作（追加/完了/削除）が1〜2アクションで完結
+- フィードバックを即時表示（完了トグル、削除）
+- 状態が分かるフィルタ（すべて/未完了/完了）
 
-## Technical Constraints
+## セキュリティとプライバシー
+- データは端末ローカルのみに保存し、外部送信しない
+- 外部スクリプト読み込みを最小化し、XSSリスクを下げる
 
-### Technology Stack
-- **HTML5**: Semantic markup
-- **CSS3**: Modern styling with flexbox/grid
-- **Vanilla JavaScript**: No frameworks or libraries
-- **LocalStorage API**: For data persistence
+## 開発プラクティス
+- HTML/CSS/JSを責務ごとに分離
+- 可読性を優先し、コメントで学習ポイントを補足
+- シンプルな関数分割で状態管理を明確化
 
-### Browser Support
-- Modern evergreen browsers (Chrome, Firefox, Safari, Edge)
-- No IE11 support required
+## スコープ外（今回は扱わない）
+- ユーザー認証・サーバー同期
+- マルチデバイス間同期・共有
+- 通知、リマインダーなどの拡張機能
 
-### Performance Requirements
-- Page load time under 1 second
-- Instant response to user interactions
-- Minimal memory footprint
-
-## Development Practices
-
-### Code Quality
-- Clean, readable code with meaningful variable names
-- Consistent code formatting and style
-- Comments for complex logic only
-- DRY (Don't Repeat Yourself) principle
-
-### File Structure
-```
-todo-app/
-├── index.html       # Main HTML structure
-├── styles.css       # All styling
-└── app.js          # Application logic
-```
-
-### Naming Conventions
-- camelCase for JavaScript variables and functions
-- kebab-case for CSS classes
-- Descriptive names that explain purpose
-
-## Security Considerations
-- Input sanitization to prevent XSS
-- Validate all user input
-- Safe HTML rendering
-
-## Accessibility Requirements
-- Semantic HTML elements
-- ARIA labels where needed
-- Keyboard navigation support
-- Sufficient color contrast (4.5:1 minimum)
-- Focus indicators for interactive elements
-
-## Out of Scope
-- User authentication
-- Cloud synchronization
-- Collaboration features
-- Mobile native apps
-- Backend server
-- Database integration
-
-## Success Criteria
-- Users can add, complete, and delete tasks
-- Data persists across browser sessions
-- Works on mobile and desktop
-- Meets accessibility standards
-- Zero external dependencies
+## 成功基準
+- 主要機能（追加/完了トグル/削除/フィルタ）が仕様通り動作
+- ページリロード後もデータが保持される
+- スマホ幅でもUIが崩れない
+- キーボードのみで操作が可能
