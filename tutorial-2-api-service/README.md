@@ -25,7 +25,7 @@ spec-kitを使って、より複雑なバックエンドAPIサービスを設計
 
 ```bash
 cd tutorial-2-api-service
-specify init blog-api --ai claude
+specify init blog-api --ai copilot
 ```
 
 ## Step 2: Constitution (憲法)の作成

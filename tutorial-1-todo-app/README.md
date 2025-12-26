@@ -17,14 +17,14 @@ spec-kitの基本的なワークフローを理解し、シンプルなToDoリ�
 
 ```bash
 cd tutorial-1-todo-app
-specify init todo-app --ai claude
+specify init todo-app --ai copilot
 ```
 
 このコマンドは `.speckit/` ディレクトリを作成し、spec-kitのスラッシュコマンドが使えるようになります。
 
 ## Step 2: Constitution (憲法)の作成
 
-プロジェクトの原則と制約を定義します。Claude CodeまたはCursorなどのAIエージェントで以下のコマンドを実行してください。
+プロジェクトの原則と制約を定義します。VS CodeのGitHub Copilotチャットで以下のコマンドを実行してください。
 
 ```
 /speckit.constitution
@@ -217,7 +217,7 @@ uv tool install specify-cli --from git+https://github.com/github/spec-kit.git
 ```
 
 ### スラッシュコマンドが動作しない
-- Claude CodeまたはCursorなどのAIエージェント内で実行してください
+- VS CodeのGitHub Copilotチャット内で実行してください
 - プロジェクトディレクトリに `.speckit/` フォルダがあることを確認してください
 
 ### 生成されたコードが期待と異なる

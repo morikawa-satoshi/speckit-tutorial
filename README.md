@@ -132,7 +132,7 @@ speckit-tutorial/
 ## よくある質問
 
 ### Q: spec-kitは日本語で使えますか？
-A: はい、AIエージェント (Claude Code, Cursorなど) で日本語の指示を出すことができます。仕様も日本語で記述可能です。
+A: はい、AIエージェント (GitHub Copilot, Cursorなど) で日本語の指示を出すことができます。仕様も日本語で記述可能です。
 
 ### Q: 既存のプロジェクトにspec-kitを導入できますか？
 A: はい、可能です。Tutorial 3 でブラウンフィールド開発への適用方法を学べます。既存コードの仕様化から始めることをお勧めします。
@@ -141,7 +141,7 @@ A: はい、可能です。Tutorial 3 でブラウンフィールド開発への
 A: はい、spec-kitは特にチーム開発で効果を発揮します。仕様が明確になることで、メンバー間の認識のズレを減らせます。
 
 ### Q: どのAIエージェントがお勧めですか？
-A: Claude Code, Cursor, GitHub Copilot などが推奨されています。このチュートリアルではClaude Codeを前提としていますが、他のエージェントでも同様に動作します。
+A: GitHub Copilot, Cursor, その他のAIエージェントが推奨されています。このチュートリアルではGitHub Copilot（VS Codeチャット）を前提としていますが、他のエージェントでも同様に動作します。
 
 ### Q: spec-kitの学習時間はどのくらいですか？
 A:
@@ -170,9 +170,9 @@ uv tool install specify-cli --from git+https://github.com/github/spec-kit.git
 ```
 
 ### スラッシュコマンドが動作しない
-- Claude CodeやCursorなどのAIエージェント内で実行してください
+- VS CodeのGitHub Copilotチャット内で実行してください
 - プロジェクトディレクトリに `.speckit/` フォルダがあることを確認してください
-- AIエージェントを再起動してみてください
+- VS Codeを再起動してみてください
 
 ### 生成されたコードが期待と異なる
 1. `constitution.md` を見直して、より詳細な原則を追加

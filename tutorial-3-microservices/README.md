@@ -49,7 +49,7 @@ spec-kitを使って、複雑なマイクロサービスアーキテクチャを
 
 ```bash
 cd tutorial-3-microservices
-specify init microservices-blog --ai claude
+specify init microservices-blog --ai copilot
 ```
 
 ## Step 2: Constitution (憲法)の作成
