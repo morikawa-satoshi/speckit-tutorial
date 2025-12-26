@@ -1,0 +1,25 @@
+{
+	"name": "github_spec_kit",
+	"build": {
+		"dockerfile": "Dockerfile",
+        "args": {
+            "DEVCONTAINER_REGISTRY": "${localEnv:DEVCONTAINER_REGISTRY:mcr.microsoft.com/devcontainers/}"
+        }
+	},	
+	"containerEnv": {
+        "TZ": "Asia/Tokyo"
+    },
+	"customizations": {
+		"vscode": {
+			"extensions": [
+				"GitHub.copilot-chat",
+				"donjayamanne.githistory",
+				"usernamehw.errorlens",
+				"ms-python.python",
+				"ms-python.vscode-pylance",
+				"ms-azuretools.vscode-azure-github-copilot"
+			]
+		}
+	},
+	"postCreateCommand": "bash .devcontainer/install_speckit.sh"
+}
